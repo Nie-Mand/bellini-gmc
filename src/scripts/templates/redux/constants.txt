@@ -1,7 +1,0 @@
-import { createActionType } from '../utils'
-
-const prefix = '<%= NAME %>'
-const create = createActionType(prefix)
-
-export const init = create.basic('INIT')
-export const create<%= Name %> = create.async('CREATE_<%= NAME %>')

@@ -1,6 +1,0 @@
-{
-    "hello": {
-        "id": "hello",
-        "defaultMessage": "hello, <%= name %>"
-    }
-}
