@@ -6,6 +6,7 @@ const useBooking = () => {
   const [bg, setBg] = useState()
   const [_space, setSpace] = useState("lounge")
   const [tables, setTables] = useState([])
+  const [date, setDate] = useState(null)
 
   useEffect(() => {
     setSpace("cafe")
@@ -71,6 +72,7 @@ const useBooking = () => {
   }
 
   return {
+    _space,
     space,
     toLounge,
     toRooftop,
@@ -78,12 +80,16 @@ const useBooking = () => {
     addRange,
     tables,
     include,
+    setTables,
     backgroundImage: bg,
+    date,
+    setDate,
   }
 }
 
 const Booking = () => {
   const {
+    _space,
     space,
     toLounge,
     toRooftop,
@@ -92,11 +98,13 @@ const Booking = () => {
     tables,
     include,
     backgroundImage,
+    date,
+    setDate,
+    setTables,
   } = useBooking()
   const [fullname, setFullname] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
-  const [date, setDate] = useState(null)
 
   const handleReservation = async () => {
     if (space === "lounge") data.space = "6211ab161f34413287faf584"
@@ -144,16 +152,19 @@ const Booking = () => {
 
     toast.success("Votre réservation a bien été prise en compte")
 
-    const _data = {
-      date,
-    }
-
-    if (space === "lounge") _data.space = "6211ab161f34413287faf584"
-
-    if (space === "cafe") _data.space = "6211acaf1f34413287faf587"
-
-    const ysx = await getTables(_data)
-    console.log(ysx)
+    setTables(
+      tables.filter((table) => {
+        console.log(
+          x,
+          y,
+          table,
+          table.x === x,
+          table.y === y,
+          !(table.x === x && table.y === y)
+        )
+        return !(table.x === x && table.y === y)
+      })
+    )
   }
 
   return (
