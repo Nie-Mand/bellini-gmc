@@ -1,9 +1,9 @@
 const Gallery = () => {
     return (
         <div className="grid md:grid-cols-4 grid-cols-2 h-auto">
-            <img src="/img/image1.png" className="h-full" />
-            <img src="/img/image2.png" className="h-full" />
-            <img src="/img/image3.png" className="h-full" />
+            <img src="/img/image1.png" className="h-full cursor-pointer" />
+            <img src="/img/image2.png" className="h-full cursor-pointer" />
+            <img src="/img/image3.png" className="h-full cursor-pointer" />
             <div className="relative">
                 <img src="/img/image4.png" className="h-full" />
                 <div className="absolute w-full h-full top-0 bg-black/50 backdrop-blur-lg"></div>
