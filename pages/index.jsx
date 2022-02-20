@@ -10,6 +10,7 @@ const Home = () => {
       <HeroSection />
       <Gallery />
       <SearchSection />
+      <div className="grid h-auto md:visible invisible"><div className="md:h-12 h-0 bg-[#f3f3f3]"></div></div>
       <Booking />
       <Footer />
     </div>
