@@ -1,13 +1,13 @@
-import Navbar from "../components/Navbar"
-import Image from "next/image"
-import { bgWrap } from "../styles.module.css"
 import Booking from "../components/Booking"
 import HeroSection from "../components/HeroSection"
+import Gallery from "../components/Gallery"
+
 const Home = () => {
   return (
-    <div>
+    <div id="scene">
       <HeroSection />
-
+      <Gallery />
+      <div className="h-40"></div>
       <Booking />
     </div>
   )
