@@ -3,3 +3,7 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Rubik+Mono+One&display=swap');
 *{font-family: 'Gelasio';}
+
+.btnBg {
+    @apply relative grid place-items-center after:absolute after:w-full after:h-full after:hover:bg-hero-pattern after:bg-bottom after:top-3 after:bg-no-repeat
+}
