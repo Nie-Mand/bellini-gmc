@@ -1,13 +1,19 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const useBooking = () => {
   const [date, setDate] = useState(new Date())
-
+  const [bg, setBg] = useState()
   const [_space, setSpace] = useState("lounge")
   const [tables, setTables] = useState([])
 
+  useEffect(() => {
+    setSpace("cafe")
+    setBg("url('/img/cafe.png')")
+  }, [])
+
   const toLounge = () => {
     setSpace("lounge")
+    setBg("url('/img/beach.png')")
   }
 
   const addRange = (x, y) => {
@@ -30,10 +36,12 @@ const useBooking = () => {
 
   const toRooftop = () => {
     setSpace("rooftop")
+    setBg("url('/img/roof.png')")
   }
 
   const toCafe = () => {
     setSpace("cafe")
+    setBg("url('/img/cafe.png')")
   }
 
   const space = () => {
@@ -76,23 +84,32 @@ const useBooking = () => {
     addRange,
     tables,
     include,
+    backgroundImage: bg,
   }
 }
 
 const Booking = () => {
-  const { space, toLounge, toRooftop, toCafe, addRange, tables, include } =
-    useBooking()
+  const {
+    space,
+    toLounge,
+    toRooftop,
+    toCafe,
+    addRange,
+    tables,
+    include,
+    backgroundImage,
+  } = useBooking()
 
   console.log(space)
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-[200vh] md:h-screen">
       <div className="relative">
         <div
-          className="bg-cover bg-center bg-no-repeat h-full"
-          style={{ backgroundImage: "url('/img/cafe.png')" }}
+          className="bg-cover bg-center bg-no-repeat h-full duration-200"
+          style={{ backgroundImage }}
         ></div>
 
-        <div className="absolute top-0 bg-black/80 h-full w-full backdrop-blur-lg">
+        <div className="absolute top-0 bg-black/80 h-full w-full backdrop-blur-sm">
           <div className="flex justify-center gap-x-10 md:gap-x-20 gelasio text-white py-10">
             <button onClick={toCafe}>Café</button>
             <button onClick={toLounge}>Lounge</button>
@@ -137,7 +154,55 @@ const Booking = () => {
         </div>
       </div>
 
-      <div>{JSON.stringify(tables)}</div>
+      <div>
+        <div className="flex flex-col items-center justify-center">
+          <div className="bg-white w-full p-10 mt-16">
+            <div>
+              <label
+                id="email"
+                className="text-sm font-medium leading-none text-gray-800"
+              >
+                {" "}
+                Email{" "}
+              </label>
+              <input
+                ariaLabelledby="email"
+                type="email"
+                className="bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
+              />
+            </div>
+            <div className="mt-6 w-full">
+              <label
+                htmlFor="pass"
+                className="text-sm font-medium leading-none text-gray-800"
+              >
+                {" "}
+                Full Name{" "}
+              </label>
+              <div>
+                <input
+                  type="number"
+                  className="bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
+                />
+              </div>
+            </div>
+            <div className="mt-6 w-full">
+              <input
+                type="date"
+                className="bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
+              />
+            </div>
+            <div className="mt-8">
+              <button
+                role="button"
+                className="focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 text-sm font-semibold leading-none text-white focus:outline-none bg-gray-700 border rounded hover:bg-gray-600 py-4 w-full"
+              >
+                Reserver
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
