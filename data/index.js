@@ -8,6 +8,6 @@ export const launchReservation = async (reservation) => {
 
 export const getTables = async (body) => {
   const url = "http://localhost:5050/api/booking/find"
-  const response = await axios.get(url, body)
-  return response.data
+  const response = await axios.post(url, body)
+  return response.data.spacefounded
 }
