@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
+import toast, { Toaster } from "react-hot-toast"
+import { launchReservation, getTables } from "../data"
 
 const useBooking = () => {
-  const [date, setDate] = useState(new Date())
   const [bg, setBg] = useState()
   const [_space, setSpace] = useState("lounge")
   const [tables, setTables] = useState([])
@@ -67,13 +68,6 @@ const useBooking = () => {
         })
       }),
     }
-
-    // if (_space === "rooftop") {
-    //   return <Rooftop />
-    // }
-    // if (_space === "cafe") {
-    //   return <Cafe />
-    // }
   }
 
   return {
@@ -99,13 +93,75 @@ const Booking = () => {
     include,
     backgroundImage,
   } = useBooking()
+  const [fullname, setFullname] = useState("")
+  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
+  const [date, setDate] = useState(null)
 
-  console.log(space)
+  const handleReservation = async () => {
+    if (space === "lounge") data.space = "6211ab161f34413287faf584"
+
+    if (space === "cafe") data.space = "6211acaf1f34413287faf587"
+
+    if (fullname.length < 3) {
+      toast.error("Veuillez entrer un nom valide")
+      return
+    }
+
+    console.log(phone)
+
+    if (phone.length !== 8) {
+      toast.error("Veuillez entrer un numéro de téléphone valide")
+      return
+    }
+
+    if (!date) {
+      toast.error("Veuillez entrer une date valide")
+      return
+    }
+
+    if (tables.length !== 1) {
+      toast.error("Veuillez choisir une table")
+      return
+    }
+
+    const { x, y } = tables[0]
+
+    const _date = new Date(date)
+    _date.setMinutes(0, 0, 0)
+    const data = {
+      full_name: fullname,
+      email,
+      phone,
+      tables,
+      date: _date,
+      space,
+      x,
+      y,
+    }
+
+    await launchReservation(data)
+
+    toast.success("Votre réservation a bien été prise en compte")
+
+    const _data = {
+      date,
+    }
+
+    if (space === "lounge") _data.space = "6211ab161f34413287faf584"
+
+    if (space === "cafe") _data.space = "6211acaf1f34413287faf587"
+
+    const ysx = await getTables(_data)
+    console.log(ysx)
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-[200vh] md:h-screen">
+      <Toaster />
       <div className="relative">
         <div
-          className="bg-cover bg-center bg-no-repeat h-full duration-200"
+          className="bg-cover bg-center bg-no-repeat h-screen md:h-full duration-200"
           style={{ backgroundImage }}
         ></div>
 
@@ -118,37 +174,41 @@ const Booking = () => {
 
           <div className="grid place-content-center mt-32">
             <div className="flex flex-col gap-4">
-              {space().tables.map((row, x) => (
-                <div key={x} className="flex items-center gap-4">
-                  {row.map((cell, y) =>
-                    cell ? (
-                      <button
-                        onClick={() => addRange(x, y)}
-                        key={y}
-                        className={`border-2 font-bold duration-200 rounded-2xl w-14 h-14 ${
-                          cell.isVIP
-                            ? "border-yellow-400"
-                            : "border-[bg-[rgba(126, 123, 123, 0.2)]]"
-                        }  ${
-                          include(x, y)
-                            ? cell.isVIP
-                              ? "bg-yellow-400"
-                              : "bg-gray-200"
-                            : ""
-                        }`}
-                      >
-                        {cell.isVIP ? "VIP" : ""}
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => addRange(x, y)}
-                        key={y}
-                        className={`w-14 h-14 `}
-                      ></button>
-                    )
-                  )}
-                </div>
-              ))}
+              {!date ? (
+                <div className="text-white font-bold">Choose Date</div>
+              ) : (
+                space().tables.map((row, x) => (
+                  <div key={x} className="flex items-center gap-4">
+                    {row.map((cell, y) =>
+                      cell ? (
+                        <button
+                          onClick={() => addRange(x, y)}
+                          key={y}
+                          className={`border-2 font-bold duration-200 rounded-2xl w-14 h-14 ${
+                            cell.isVIP
+                              ? "border-yellow-400 text-yellow-400"
+                              : "border-[bg-[rgba(126, 123, 123, 0.2)]]"
+                          }  ${
+                            include(x, y)
+                              ? cell.isVIP
+                                ? "bg-yellow-400 text-black"
+                                : "bg-gray-200"
+                              : ""
+                          }`}
+                        >
+                          {cell.isVIP ? "VIP" : ""}
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => addRange(x, y)}
+                          key={y}
+                          className={`w-14 h-14 `}
+                        ></button>
+                      )
+                    )}
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -157,21 +217,7 @@ const Booking = () => {
       <div>
         <div className="flex flex-col items-center justify-center">
           <div className="bg-white w-full p-10 mt-16">
-            <div>
-              <label
-                id="email"
-                className="text-sm font-medium leading-none text-gray-800"
-              >
-                {" "}
-                Email{" "}
-              </label>
-              <input
-                ariaLabelledby="email"
-                type="email"
-                className="bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
-              />
-            </div>
-            <div className="mt-6 w-full">
+            <div className="w-full">
               <label
                 htmlFor="pass"
                 className="text-sm font-medium leading-none text-gray-800"
@@ -181,21 +227,72 @@ const Booking = () => {
               </label>
               <div>
                 <input
-                  type="number"
+                  value={fullname}
+                  onChange={(e) => setFullname(e.target.value)}
+                  type="string"
                   className="bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
                 />
               </div>
             </div>
-            <div className="mt-6 w-full">
+
+            <div className="mt-6 ">
+              <label
+                id="email"
+                className="text-sm font-medium leading-none text-gray-800"
+              >
+                {" "}
+                Phone{" "}
+              </label>
               <input
-                type="date"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                ariaLabelledby="phone"
+                type="tel"
                 className="bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
               />
             </div>
+
+            <div className="mt-6 w-full">
+              <label
+                htmlFor="pass"
+                className="text-sm font-medium leading-none text-gray-800"
+              >
+                {" "}
+                Email{" "}
+              </label>
+              <div>
+                <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  className="bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 w-full">
+              <label
+                htmlFor="pass"
+                className="text-sm font-medium leading-none text-gray-800"
+              >
+                {" "}
+                Reservation Date{" "}
+              </label>
+              <div>
+                <input
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  type="datetime-local"
+                  className="bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
+                />
+              </div>
+            </div>
+
             <div className="mt-8">
               <button
+                onClick={handleReservation}
                 role="button"
-                className="focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 text-sm font-semibold leading-none text-white focus:outline-none bg-gray-700 border rounded hover:bg-gray-600 py-4 w-full"
+                className="focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 text-sm font-semibold leading-none text-white focus:outline-none duration-200 bg-[#20201E] border rounded-full  py-4 w-full"
               >
                 Reserver
               </button>
