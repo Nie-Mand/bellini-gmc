@@ -7,7 +7,7 @@ const Home = () => {
     <div id="scene">
       <HeroSection />
       <Gallery />
-      <div className="h-40"></div>
+      <div className=" grid h-auto bg-slate-200"><div className="h-32"></div></div>
       <Booking />
     </div>
   )
