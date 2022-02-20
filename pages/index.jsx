@@ -1,20 +1,22 @@
-import Navbar from '../components/Navbar'
-import Image from 'next/images';
-import {bgWrap} from '../styles.module.css'
-
+import Navbar from "../components/Navbar"
+import Image from "next/image"
+import { bgWrap } from "../styles.module.css"
+import Booking from "../components/Booking"
 const Home = () => {
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <div className={bgWrap}>
-        <Image
+        {/* <Image
           alt="travel"
           src="../public/img/mainBg.png"
           layout="fill"
           objectFit="cover"
           quality={100}
-        />
+        /> */}
       </div>
+
+      <Booking />
     </div>
   )
 }
